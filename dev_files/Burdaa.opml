@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="2.0">
+  <head>
+    <title>Local Sqlite Schema</title>
+  </head>
+  <body>
+    <outline text="Local Sqlite Schema"/>
+    <outline text="monthlyByWeekdaySeriesDetails">
+      <outline text="id">
+        <outline text="int(auto)"/>
+      </outline>
+      <outline text="seriesId">
+        <outline text="int"/>
+      </outline>
+      <outline text="weekday">
+        <outline text="int={1,...,7}"/>
+      </outline>
+      <outline text="weekdayOrder">
+        <outline text="int={1,...,4}"/>
+      </outline>
+      <outline text="updatedAt">
+        <outline text="timestamp"/>
+      </outline>
+    </outline>
+    <outline text="monthlyByDaySeriesDetails">
+      <outline text="id">
+        <outline text="int(auto)"/>
+      </outline>
+      <outline text="seriesId">
+        <outline text="int"/>
+      </outline>
+      <outline text="dayOfMonth">
+        <outline text="int={-1,1,...,30}"/>
+      </outline>
+      <outline text="updatedAt">
+        <outline text="timestamp"/>
+      </outline>
+    </outline>
+    <outline text="onceSeriesDetails">
+      <outline text="id">
+        <outline text="int(auto)"/>
+      </outline>
+      <outline text="seriesId">
+        <outline text="int"/>
+      </outline>
+      <outline text="makeupFor">
+        <outline text="int?"/>
+      </outline>
+      <outline text="updatedAt">
+        <outline text="timestamp"/>
+      </outline>
+    </outline>
+    <outline text="sessionSeries">
+      <outline text="id">
+        <outline text="int(auto)"/>
+      </outline>
+      <outline text="courseId">
+        <outline text="int"/>
+      </outline>
+      <outline text="*recurrenceRule">
+        <outline text="frequency">
+          <outline text="int={11(once), 21(daily), 31(weekly), 41(monthlyByDay), 42(monthlyByWeekday)}"/>
+        </outline>
+        <outline text="interval">
+          <outline text="int"/>
+        </outline>
+      </outline>
+      <outline text="*immutableTemplate">
+        <outline text="sessionWeight">
+          <outline text="int"/>
+        </outline>
+      </outline>
+      <outline text="*strongTemplate">
+        <outline text="sessionStartTime">
+          <outline text="minutes"/>
+        </outline>
+        <outline text="sessionDuration">
+          <outline text="minutes"/>
+        </outline>
+      </outline>
+      <outline text="*summary">
+        <outline text="sessionCount">
+          <outline text="int"/>
+        </outline>
+        <outline text="startsAt">
+          <outline text="datetime"/>
+        </outline>
+        <outline text="endsAt">
+          <outline text="datetime"/>
+        </outline>
+      </outline>
+      <outline text="*metadata">
+        <outline text="createdAt">
+          <outline text="timestamp"/>
+        </outline>
+      </outline>
+    </outline>
+    <outline text="courses">
+      <outline text="id">
+        <outline text="int(auto)"/>
+      </outline>
+      <outline text="title">
+        <outline text="text"/>
+      </outline>
+      <outline text="location">
+        <outline text="text?"/>
+      </outline>
+      <outline text="*metadata">
+        <outline text="createdAt">
+          <outline text="datetime"/>
+        </outline>
+        <outline text="updatedAt">
+          <outline text="datetime"/>
+        </outline>
+      </outline>
+    </outline>
+    <outline text="LEGEND">
+      <outline text="[]">
+        <outline text="default value"/>
+      </outline>
+      <outline text="?">
+        <outline text="nullable"/>
+      </outline>
+      <outline text="={}">
+        <outline text="possible values"/>
+      </outline>
+      <outline text="()">
+        <outline text="description"/>
+      </outline>
+      <outline text="*">
+        <outline text="grouping for visual"/>
+      </outline>
+      <outline text="date">
+        <outline text="ISO 8601 date time format in utc with 00.00 in time"/>
+      </outline>
+      <outline text="datetime">
+        <outline text="ISO 8601 date time format in utc"/>
+      </outline>
+      <outline text="bool">
+        <outline text="int type with 0 and 1 as possible values"/>
+      </outline>
+      <outline text="minutes">
+        <outline text="int with a value range of 0 - 1440"/>
+      </outline>
+      <outline text="timestamp">
+        <outline text="ISO 8601 date time format in utc with milliseconds"/>
+      </outline>
+    </outline>
+    <outline text="sessions">
+      <outline text="id">
+        <outline text="int(auto)"/>
+      </outline>
+      <outline text="templateId">
+        <outline text="int"/>
+      </outline>
+      <outline text="*datetime">
+        <outline text="originalDatetime">
+          <outline text="datetime"/>
+        </outline>
+        <outline text="originalDuration">
+          <outline text="minutes"/>
+        </outline>
+        <outline text="overrideDatetime">
+          <outline text="datetime?"/>
+        </outline>
+        <outline text="overrideDuration">
+          <outline text="minutes?"/>
+        </outline>
+      </outline>
+      <outline text="*template">
+        <outline text="modified">
+          <outline text="bool"/>
+        </outline>
+        <outline text="overrideTitle">
+          <outline text="text?"/>
+        </outline>
+        <outline text="overrideLocation">
+          <outline text="text?"/>
+        </outline>
+      </outline>
+      <outline text="*summary">
+        <outline text="courseId">
+          <outline text="int"/>
+        </outline>
+        <outline text="seriesId">
+          <outline text="int"/>
+        </outline>
+      </outline>
+      <outline text="*metadata">
+        <outline text="createdAt">
+          <outline text="timestamp"/>
+        </outline>
+        <outline text="updatedAt">
+          <outline text="timestamp"/>
+        </outline>
+      </outline>
+    </outline>
+    <outline text="LIMITS">
+      <outline text="course date range">
+        <outline text="500 days"/>
+      </outline>
+      <outline text="recurrence rule date">
+        <outline text="start">
+          <outline text="course start date"/>
+        </outline>
+        <outline text="end">
+          <outline text="course end date"/>
+        </outline>
+      </outline>
+      <outline text="course session count">
+        <outline text="1000"/>
+      </outline>
+      <outline text="daily session count">
+        <outline text="50"/>
+      </outline>
+      <outline text="course title character count">
+        <outline text="200"/>
+      </outline>
+      <outline text="session title character count">
+        <outline text="200"/>
+      </outline>
+      <outline text="session location character count">
+        <outline text="100"/>
+      </outline>
+      <outline text="session annotation character count">
+        <outline text="500"/>
+      </outline>
+      <outline text="session weight">
+        <outline text="4"/>
+      </outline>
+      <outline text="recurrenceInterval limits">
+        <outline text="once">
+          <outline text="1"/>
+        </outline>
+        <outline text="daily">
+          <outline text="6"/>
+        </outline>
+        <outline text="weekly">
+          <outline text="10"/>
+        </outline>
+        <outline text="monthlyByDay">
+          <outline text="3"/>
+        </outline>
+        <outline text="monthlyByWeekday">
+          <outline text="1"/>
+        </outline>
+      </outline>
+    </outline>
+    <outline text="sessionAttendanceRecords">
+      <outline text="id">
+        <outline text="int(auto)"/>
+      </outline>
+      <outline text="sessionId">
+        <outline text="int"/>
+      </outline>
+      <outline text="weight">
+        <outline text="int"/>
+      </outline>
+      <outline text="status">
+        <outline text="int={11(attended), 12(excused), 21(absent), 31(suspended), 41(cancelled), 42(holiday)}"/>
+      </outline>
+      <outline text="recordedAt">
+        <outline text="timestamp"/>
+      </outline>
+    </outline>
+    <outline text="weeklySeriesDetails">
+      <outline text="id">
+        <outline text="int(auto)"/>
+      </outline>
+      <outline text="seriesId">
+        <outline text="int"/>
+      </outline>
+      <outline text="weekday">
+        <outline text="int={1,...,7}"/>
+      </outline>
+      <outline text="updatedAt">
+        <outline text="timestamp"/>
+      </outline>
+    </outline>
+    <outline text="sessionTemplates">
+      <outline text="id">
+        <outline text="int(auto)"/>
+      </outline>
+      <outline text="seriesId">
+        <outline text="int"/>
+      </outline>
+      <outline text="title">
+        <outline text="text?"/>
+      </outline>
+      <outline text="location">
+        <outline text="text?"/>
+      </outline>
+      <outline text="updatedAt">
+        <outline text="timestamp"/>
+      </outline>
+    </outline>
+    <outline text="sessionAnnotations">
+      <outline text="id">
+        <outline text="int(auto)"/>
+      </outline>
+      <outline text="sessionId">
+        <outline text="int"/>
+      </outline>
+      <outline text="content">
+        <outline text="text"/>
+      </outline>
+      <outline text="updatedAt">
+        <outline text="timestamp"/>
+      </outline>
+    </outline>
+    <outline text="metadata">
+      <outline text="appVersion">
+        <outline text="text"/>
+      </outline>
+      <outline text="firstUsedAt">
+        <outline text="timestamp"/>
+      </outline>
+      <outline text="lastBackupAt">
+        <outline text="timestamp"/>
+      </outline>
+      <outline text="lastVacuumAt">
+        <outline text="timestamp"/>
+      </outline>
+      <outline text="deviceId">
+        <outline text="text"/>
+      </outline>
+    </outline>
+  </body>
+</opml>
