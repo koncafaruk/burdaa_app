@@ -1,0 +1,152 @@
+﻿Analyzing burdaa_vibe_v1...                                     
+
+   info - The type parameter name 'Type' matches a visible type name - lib\core\usecases\usecase.dart:9:24 - avoid_types_as_parameter_names
+   info - Don't invoke 'print' in production code - lib\core\util\notification_service.dart:62:9 - avoid_print
+  error - The method 'notifyAttendanceUpdate' isn't defined for the type 'NotificationService' - lib\core\util\notification_service.dart:65:31 - undefined_method
+   info - Empty catch block - lib\core\util\notification_service.dart:66:19 - empty_catches
+warning - Dead code: Catch clauses after a 'catch (e)' or an 'on Object catch (e)' are never reached - lib\core\util\notification_service.dart:67:9 - dead_code_catch_following_catch
+   info - Don't invoke 'print' in production code - lib\core\util\notification_service.dart:68:9 - avoid_print
+warning - The declaration 'init' isn't referenced - lib\core\util\notification_service.dart:152:16 - unused_element
+warning - The declaration 'notifyAttendanceUpdate' isn't referenced - lib\core\util\notification_service.dart:156:8 - unused_element
+warning - The declaration 'scheduleCourseNotification' isn't referenced - lib\core\util\notification_service.dart:160:16 - unused_element
+  error - Local variable '_nextInstanceOfDayAndTime' can't be referenced before it is declared - lib\core\util\notification_service.dart:184:7 - referenced_before_declaration
+   info - Don't invoke 'print' in production code - lib\core\util\notification_service.dart:218:5 - avoid_print
+   info - The local variable '_nextInstanceOfDayAndTime' starts with an underscore - lib\core\util\notification_service.dart:223:17 - no_leading_underscores_for_local_identifiers
+warning - The declaration 'cancelCourseNotification' isn't referenced - lib\core\util\notification_service.dart:247:16 - unused_element
+warning - The declaration 'cancelAllNotifications' isn't referenced - lib\core\util\notification_service.dart:251:16 - unused_element
+warning - The declaration 'showScheduledNotification' isn't referenced - lib\core\util\notification_service.dart:256:16 - unused_element
+warning - The declaration 'requestPermissions' isn't referenced - lib\core\util\notification_service.dart:280:16 - unused_element
+   info - Don't invoke 'print' in production code - lib\core\util\notification_service.dart:300:7 - avoid_print
+warning - The declaration 'arePermissionsGranted' isn't referenced - lib\core\util\notification_service.dart:315:16 - unused_element
+  error - Expected to find '}' - lib\core\util\notification_service.dart:321:1 - expected_token
+  error - The method 'scheduleCourseNotification' isn't defined for the type 'NotificationService' - lib\presentation\courses\bloc\courses_bloc.dart:53:33 - undefined_method
+  error - The method 'cancelCourseNotification' isn't defined for the type 'NotificationService' - lib\presentation\courses\bloc\courses_bloc.dart:59:33 - undefined_method
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\presentation\courses\pages\course_detail_page.dart:195:49 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\presentation\courses\pages\course_detail_page.dart:334:51 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\presentation\courses\pages\course_detail_page.dart:340:58 - deprecated_member_use
+   info - 'surfaceVariant' is deprecated and shouldn't be used. Use surfaceContainerHighest instead. This feature was deprecated after v3.18.0-0.1.pre - lib\presentation\courses\pages\course_detail_page.dart:420:27 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\presentation\courses\pages\course_detail_page.dart:420:42 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\presentation\courses\pages\course_detail_page.dart:518:45 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\presentation\courses\pages\course_detail_page.dart:521:47 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\presentation\courses\pages\course_detail_page.dart:544:36 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\presentation\courses\pages\course_detail_page.dart:545:29 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\presentation\courses\pages\course_detail_page.dart:564:22 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\presentation\courses\pages\course_detail_page.dart:566:41 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\presentation\courses\pages\course_detail_page.dart:569:33 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\presentation\courses\pages\course_detail_page.dart:580:28 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\presentation\courses\pages\course_detail_page.dart:614:60 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\presentation\courses\pages\course_detail_page.dart:631:30 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\presentation\courses\pages\course_detail_page.dart:633:49 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\presentation\courses\pages\course_detail_page.dart:640:36 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\presentation\courses\pages\courses_page.dart:26:64 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\presentation\courses\pages\courses_page.dart:81:57 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\presentation\courses\pages\courses_page.dart:206:33 - deprecated_member_use
+   info - 'value' is deprecated and shouldn't be used. Use initialValue instead. This will set the initial value for the form field. This feature was deprecated after v3.33.0-1.0.pre - lib\presentation\courses\pages\courses_page.dart:312:13 - deprecated_member_use
+  error - The method 'requestPermissions' isn't defined for the type 'NotificationService' - lib\presentation\home\pages\main_screen.dart:20:27 - undefined_method
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\presentation\home\pages\main_screen.dart:46:35 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\presentation\settings\pages\settings_page.dart:19:63 - deprecated_member_use
+   info - Don't use 'BuildContext's across async gaps - lib\presentation\settings\pages\settings_page.dart:105:22 - use_build_context_synchronously
+   info - Don't use 'BuildContext's across async gaps - lib\presentation\settings\pages\settings_page.dart:106:22 - use_build_context_synchronously
+   info - Don't use 'BuildContext's across async gaps - lib\presentation\settings\pages\settings_page.dart:107:22 - use_build_context_synchronously
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\presentation\settings\pages\settings_page.dart:142:52 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\presentation\settings\pages\settings_page.dart:146:63 - deprecated_member_use
+  error - Missing concrete implementation of 'abstract class State<T extends StatefulWidget> with Diagnosticable.build' - lib\presentation\today\pages\today_page.dart:20:7 - non_abstract_class_inherits_abstract_member
+  error - The method '_checkPermissions' isn't defined for the type '_TodayPageState' - lib\presentation\today\pages\today_page.dart:28:5 - undefined_method
+warning - The declaration 'dispose' isn't referenced - lib\presentation\today\pages\today_page.dart:38:8 - unused_element
+warning - The declaration 'didChangeAppLifecycleState' isn't referenced - lib\presentation\today\pages\today_page.dart:45:8 - unused_element
+  error - Local variable '_checkPermissions' can't be referenced before it is declared - lib\presentation\today\pages\today_page.dart:47:7 - referenced_before_declaration
+   info - The local variable '_checkPermissions' starts with an underscore - lib\presentation\today\pages\today_page.dart:53:16 - no_leading_underscores_for_local_identifiers
+  error - The method 'arePermissionsGranted' isn't defined for the type 'NotificationService' - lib\presentation\today\pages\today_page.dart:54:49 - undefined_method
+warning - The declaration 'build' isn't referenced - lib\presentation\today\pages\today_page.dart:63:10 - unused_element
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\presentation\today\pages\today_page.dart:74:62 - deprecated_member_use
+  error - The method '_PermissionAlert' isn't defined for the type '_TodayPageState' - lib\presentation\today\pages\today_page.dart:106:19 - undefined_method
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\presentation\today\pages\today_page.dart:126:55 - deprecated_member_use
+  error - The method '_TodayCourseCard' isn't defined for the type '_TodayPageState' - lib\presentation\today\pages\today_page.dart:162:38 - undefined_method
+  error - Classes can't be declared inside other classes - lib\presentation\today\pages\today_page.dart:182:1 - class_in_class
+  error - Expected a class member - lib\presentation\today\pages\today_page.dart:182:24 - expected_class_member
+   info - Missing type annotation - lib\presentation\today\pages\today_page.dart:182:32 - strict_top_level_inference
+   info - The variable name 'StatelessWidget' isn't a lowerCamelCase identifier - lib\presentation\today\pages\today_page.dart:182:32 - non_constant_identifier_names
+  error - Methods must have an explicit list of parameters - lib\presentation\today\pages\today_page.dart:182:32 - missing_method_parameters
+  error - The name '_TodayCourseCard' isn't a class - lib\presentation\today\pages\today_page.dart:186:9 - creation_with_non_type
+   info - 'required' is deprecated and shouldn't be used. In Dart 2.12 and later, use the built-in `required` keyword to mark a named parameter as required - lib\presentation\today\pages\today_page.dart:186:27 - deprecated_member_use
+  error - Expected to find ',' - lib\presentation\today\pages\today_page.dart:186:36 - expected_token
+  error - The getter 'course' isn't defined for the type '_TodayPageState' - lib\presentation\today\pages\today_page.dart:186:41 - undefined_getter
+   info - 'required' is deprecated and shouldn't be used. In Dart 2.12 and later, use the built-in `required` keyword to mark a named parameter as required - lib\presentation\today\pages\today_page.dart:186:49 - deprecated_member_use
+  error - Expected to find ',' - lib\presentation\today\pages\today_page.dart:186:58 - expected_token
+  error - The getter 'record' isn't defined for the type '_TodayPageState' - lib\presentation\today\pages\today_page.dart:186:63 - undefined_getter
+warning - The declaration 'build' isn't referenced - lib\presentation\today\pages\today_page.dart:189:10 - unused_element
+  error - The final variable 'record' can't be read because it's potentially unassigned at this point - lib\presentation\today\pages\today_page.dart:190:23 - read_potentially_unassigned_final
+  error - The final variable 'record' can't be read because it's potentially unassigned at this point - lib\presentation\today\pages\today_page.dart:191:21 - read_potentially_unassigned_final
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\presentation\today\pages\today_page.dart:200:33 - deprecated_member_use
+  error - The final variable 'course' can't be read because it's potentially unassigned at this point - lib\presentation\today\pages\today_page.dart:215:68 - read_potentially_unassigned_final
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\presentation\today\pages\today_page.dart:226:54 - deprecated_member_use
+  error - The final variable 'course' can't be read because it's potentially unassigned at this point - lib\presentation\today\pages\today_page.dart:240:27 - read_potentially_unassigned_final
+  error - The final variable 'course' can't be read because it's potentially unassigned at this point - lib\presentation\today\pages\today_page.dart:249:30 - read_potentially_unassigned_final
+  error - The final variable 'course' can't be read because it's potentially unassigned at this point - lib\presentation\today\pages\today_page.dart:249:52 - read_potentially_unassigned_final
+  error - The method '_AttendanceButton' isn't defined for the type '_TodayPageState' - lib\presentation\today\pages\today_page.dart:268:26 - undefined_method
+  error - The final variable 'course' can't be read because it's potentially unassigned at this point - lib\presentation\today\pages\today_page.dart:276:37 - read_potentially_unassigned_final
+  error - The method '_AttendanceButton' isn't defined for the type '_TodayPageState' - lib\presentation\today\pages\today_page.dart:286:26 - undefined_method
+  error - The final variable 'course' can't be read because it's potentially unassigned at this point - lib\presentation\today\pages\today_page.dart:294:37 - read_potentially_unassigned_final
+  error - Classes can't be declared inside other classes - lib\presentation\today\pages\today_page.dart:311:1 - class_in_class
+  error - Expected a class member - lib\presentation\today\pages\today_page.dart:311:24 - expected_class_member
+   info - Missing type annotation - lib\presentation\today\pages\today_page.dart:311:32 - strict_top_level_inference
+   info - The variable name 'StatelessWidget' isn't a lowerCamelCase identifier - lib\presentation\today\pages\today_page.dart:311:32 - non_constant_identifier_names
+  error - Methods must have an explicit list of parameters - lib\presentation\today\pages\today_page.dart:311:32 - missing_method_parameters
+  error - The name 'StatelessWidget' is already defined - lib\presentation\today\pages\today_page.dart:311:32 - duplicate_definition
+  error - The name '_PermissionAlert' isn't a class - lib\presentation\today\pages\today_page.dart:314:9 - creation_with_non_type
+   info - 'required' is deprecated and shouldn't be used. In Dart 2.12 and later, use the built-in `required` keyword to mark a named parameter as required - lib\presentation\today\pages\today_page.dart:314:27 - deprecated_member_use
+  error - Expected to find ',' - lib\presentation\today\pages\today_page.dart:314:36 - expected_token
+  error - The getter 'onTap' isn't defined for the type '_TodayPageState' - lib\presentation\today\pages\today_page.dart:314:41 - undefined_getter
+warning - The declaration 'build' isn't referenced - lib\presentation\today\pages\today_page.dart:317:10 - unused_element
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\presentation\today\pages\today_page.dart:324:58 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\presentation\today\pages\today_page.dart:325:58 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\presentation\today\pages\today_page.dart:330:54 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\presentation\today\pages\today_page.dart:334:56 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\presentation\today\pages\today_page.dart:348:62 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\presentation\today\pages\today_page.dart:380:48 - deprecated_member_use
+  error - The method 'requestPermissions' isn't defined for the type 'NotificationService' - lib\presentation\today\pages\today_page.dart:387:43 - undefined_method
+  error - The final variable 'onTap' can't be read because it's potentially unassigned at this point - lib\presentation\today\pages\today_page.dart:390:15 - read_potentially_unassigned_final
+  error - The method 'arePermissionsGranted' isn't defined for the type 'NotificationService' - lib\presentation\today\pages\today_page.dart:394:22 - undefined_method
+   info - Don't use 'BuildContext's across async gaps - lib\presentation\today\pages\today_page.dart:396:40 - use_build_context_synchronously
+  error - Classes can't be declared inside other classes - lib\presentation\today\pages\today_page.dart:429:1 - class_in_class
+  error - Expected a class member - lib\presentation\today\pages\today_page.dart:429:25 - expected_class_member
+   info - Missing type annotation - lib\presentation\today\pages\today_page.dart:429:33 - strict_top_level_inference
+   info - The variable name 'StatelessWidget' isn't a lowerCamelCase identifier - lib\presentation\today\pages\today_page.dart:429:33 - non_constant_identifier_names
+  error - Methods must have an explicit list of parameters - lib\presentation\today\pages\today_page.dart:429:33 - missing_method_parameters
+  error - The name 'StatelessWidget' is already defined - lib\presentation\today\pages\today_page.dart:429:33 - duplicate_definition
+  error - The name '_AttendanceButton' isn't a class - lib\presentation\today\pages\today_page.dart:436:9 - creation_with_non_type
+   info - 'required' is deprecated and shouldn't be used. In Dart 2.12 and later, use the built-in `required` keyword to mark a named parameter as required - lib\presentation\today\pages\today_page.dart:437:5 - deprecated_member_use
+  error - Expected to find ',' - lib\presentation\today\pages\today_page.dart:437:14 - expected_token
+  error - The getter 'label' isn't defined for the type '_TodayPageState' - lib\presentation\today\pages\today_page.dart:437:19 - undefined_getter
+   info - 'required' is deprecated and shouldn't be used. In Dart 2.12 and later, use the built-in `required` keyword to mark a named parameter as required - lib\presentation\today\pages\today_page.dart:438:5 - deprecated_member_use
+  error - Expected to find ',' - lib\presentation\today\pages\today_page.dart:438:14 - expected_token
+  error - The getter 'icon' isn't defined for the type '_TodayPageState' - lib\presentation\today\pages\today_page.dart:438:19 - undefined_getter
+   info - 'required' is deprecated and shouldn't be used. In Dart 2.12 and later, use the built-in `required` keyword to mark a named parameter as required - lib\presentation\today\pages\today_page.dart:439:5 - deprecated_member_use
+  error - Expected to find ',' - lib\presentation\today\pages\today_page.dart:439:14 - expected_token
+  error - The getter 'color' isn't defined for the type '_TodayPageState' - lib\presentation\today\pages\today_page.dart:439:19 - undefined_getter
+   info - 'required' is deprecated and shouldn't be used. In Dart 2.12 and later, use the built-in `required` keyword to mark a named parameter as required - lib\presentation\today\pages\today_page.dart:440:5 - deprecated_member_use
+  error - Expected to find ',' - lib\presentation\today\pages\today_page.dart:440:14 - expected_token
+  error - The getter 'isSelected' isn't defined for the type '_TodayPageState' - lib\presentation\today\pages\today_page.dart:440:19 - undefined_getter
+   info - 'required' is deprecated and shouldn't be used. In Dart 2.12 and later, use the built-in `required` keyword to mark a named parameter as required - lib\presentation\today\pages\today_page.dart:441:5 - deprecated_member_use
+  error - Expected to find ',' - lib\presentation\today\pages\today_page.dart:441:14 - expected_token
+  error - The getter 'onTap' isn't defined for the type '_TodayPageState' - lib\presentation\today\pages\today_page.dart:441:19 - undefined_getter
+warning - The declaration 'build' isn't referenced - lib\presentation\today\pages\today_page.dart:445:10 - unused_element
+  error - The final variable 'onTap' can't be read because it's potentially unassigned at this point - lib\presentation\today\pages\today_page.dart:447:14 - read_potentially_unassigned_final
+  error - The final variable 'isSelected' can't be read because it's potentially unassigned at this point - lib\presentation\today\pages\today_page.dart:452:18 - read_potentially_unassigned_final
+  error - The final variable 'color' can't be read because it's potentially unassigned at this point - lib\presentation\today\pages\today_page.dart:452:31 - read_potentially_unassigned_final
+  error - The final variable 'color' can't be read because it's potentially unassigned at this point - lib\presentation\today\pages\today_page.dart:452:39 - read_potentially_unassigned_final
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\presentation\today\pages\today_page.dart:452:45 - deprecated_member_use
+  error - The final variable 'isSelected' can't be read because it's potentially unassigned at this point - lib\presentation\today\pages\today_page.dart:455:20 - read_potentially_unassigned_final
+  error - The final variable 'color' can't be read because it's potentially unassigned at this point - lib\presentation\today\pages\today_page.dart:455:33 - read_potentially_unassigned_final
+  error - The final variable 'color' can't be read because it's potentially unassigned at this point - lib\presentation\today\pages\today_page.dart:455:41 - read_potentially_unassigned_final
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\presentation\today\pages\today_page.dart:455:47 - deprecated_member_use
+  error - The final variable 'icon' can't be read because it's potentially unassigned at this point - lib\presentation\today\pages\today_page.dart:462:18 - read_potentially_unassigned_final
+  error - The final variable 'isSelected' can't be read because it's potentially unassigned at this point - lib\presentation\today\pages\today_page.dart:462:41 - read_potentially_unassigned_final
+  error - The final variable 'color' can't be read because it's potentially unassigned at this point - lib\presentation\today\pages\today_page.dart:462:69 - read_potentially_unassigned_final
+  error - The final variable 'label' can't be read because it's potentially unassigned at this point - lib\presentation\today\pages\today_page.dart:465:15 - read_potentially_unassigned_final
+  error - The final variable 'isSelected' can't be read because it's potentially unassigned at this point - lib\presentation\today\pages\today_page.dart:469:26 - read_potentially_unassigned_final
+  error - The final variable 'color' can't be read because it's potentially unassigned at this point - lib\presentation\today\pages\today_page.dart:469:54 - read_potentially_unassigned_final
+  error - Expected to find '}' - lib\presentation\today\pages\today_page.dart:479:1 - expected_token
+   info - Don't invoke 'print' in production code - test\database_test.dart:88:7 - avoid_print
+   info - Don't invoke 'print' in production code - test\database_test.dart:89:7 - avoid_print
+

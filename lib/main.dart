@@ -30,9 +30,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Request permissions on app start (for simplicity, or do it on a button)
-    NotificationService().requestPermissions();
-
     return MaterialApp(
       title: 'Burdaa Vibe',
       debugShowCheckedModeBanner: false,

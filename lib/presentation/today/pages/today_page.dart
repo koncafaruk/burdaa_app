@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:burdaa_vibe_v1/presentation/courses/bloc/courses_bloc.dart';
@@ -7,8 +8,55 @@ import 'package:burdaa_vibe_v1/data/today/models/attendance_record.dart';
 import 'package:burdaa_vibe_v1/presentation/courses/pages/course_detail_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class TodayPage extends StatelessWidget {
+import 'package:burdaa_vibe_v1/core/util/notification_service.dart';
+
+class TodayPage extends StatefulWidget {
   const TodayPage({super.key});
+
+  @override
+  State<TodayPage> createState() => _TodayPageState();
+}
+
+class _TodayPageState extends State<TodayPage> with WidgetsBindingObserver {
+  bool _permissionsGranted = true;
+  StreamSubscription? _subscription;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _checkPermissions();
+    _subscription = NotificationService().responseStream.listen((event) {
+      if (event == 'attendance_update' && mounted) {
+        context.read<AttendanceBloc>().add(LoadAttendance());
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _subscription?.cancel();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _checkPermissions();
+      // Reload attendance when app comes to foreground to reflect any changes from notifications
+      context.read<AttendanceBloc>().add(LoadAttendance());
+    }
+  }
+
+  Future<void> _checkPermissions() async {
+    final granted = await NotificationService().arePermissionsGranted();
+    if (mounted && granted != _permissionsGranted) {
+      setState(() {
+        _permissionsGranted = granted;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +100,10 @@ class TodayPage extends StatelessWidget {
                     ).textTheme.bodyLarge?.copyWith(color: Colors.grey[600]),
                   ),
                 ),
+                if (!_permissionsGranted) ...[
+                  const SizedBox(height: 24),
+                  _PermissionAlert(onTap: _checkPermissions),
+                ],
                 const SizedBox(height: 32),
                 Expanded(
                   child: BlocBuilder<CoursesBloc, CoursesState>(
@@ -250,6 +302,124 @@ class _TodayCourseCard extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _PermissionAlert extends StatelessWidget {
+  final VoidCallback onTap;
+
+  const _PermissionAlert({required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Theme.of(context).colorScheme.errorContainer.withOpacity(0.9),
+            Theme.of(context).colorScheme.errorContainer.withOpacity(0.7),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.error.withOpacity(0.2),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Theme.of(context).colorScheme.error.withOpacity(0.1),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.error.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.notifications_off_rounded,
+                  color: Theme.of(context).colorScheme.error,
+                  size: 20,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  'Bildirim İzinleri Eksik',
+                  style: GoogleFonts.outfit(
+                    textStyle: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: Theme.of(context).colorScheme.onErrorContainer,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Text(
+            'Derslerini zamanında hatırlatabilmemiz için bildirim ve tam doğrulukta alarm izinlerini vermeniz gerekiyor.',
+            style: GoogleFonts.inter(
+              textStyle: TextStyle(
+                fontSize: 14,
+                color: Theme.of(
+                  context,
+                ).colorScheme.onErrorContainer.withOpacity(0.8),
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () async {
+              await NotificationService().requestPermissions();
+              // Give the system a moment to update status
+              await Future.delayed(const Duration(milliseconds: 500));
+              onTap();
+
+              if (context.mounted) {
+                final stillMissing = !await NotificationService()
+                    .arePermissionsGranted();
+                if (stillMissing) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        'İzinler henüz tam olarak verilmedi. Eğer uyarı çıkmıyorsa ayarlardan manuel açabilirsiniz.',
+                      ),
+                      duration: Duration(seconds: 4),
+                    ),
+                  );
+                }
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.error,
+              foregroundColor: Theme.of(context).colorScheme.onError,
+              elevation: 0,
+              minimumSize: const Size(double.infinity, 48),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+            ),
+            child: Text(
+              'İzin Ver',
+              style: GoogleFonts.inter(
+                textStyle: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

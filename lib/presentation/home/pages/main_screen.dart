@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:burdaa_vibe_v1/presentation/today/pages/today_page.dart';
 import 'package:burdaa_vibe_v1/presentation/courses/pages/courses_page.dart';
 import 'package:burdaa_vibe_v1/presentation/settings/pages/settings_page.dart';
+import 'package:burdaa_vibe_v1/core/util/notification_service.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -12,6 +13,12 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    NotificationService().requestPermissions();
+  }
 
   final List<Widget> _pages = [
     const TodayPage(),

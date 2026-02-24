@@ -101,6 +101,37 @@ class DatabaseHelper {
     }
   }
 
+  static Future<void> markAttendance(String courseId, int status) async {
+    final db = await instance.database;
+    final now = DateTime.now();
+    final dateString =
+        "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
+
+    final existingRecords = await db.query(
+      'attendance',
+      where: 'courseId = ? AND date = ?',
+      whereArgs: [courseId, dateString],
+    );
+
+    final map = {
+      'courseId': courseId,
+      'date': dateString,
+      'status': status,
+      'recordedAt': now.toIso8601String(),
+    };
+
+    if (existingRecords.isNotEmpty) {
+      await db.update(
+        'attendance',
+        map,
+        where: 'id = ?',
+        whereArgs: [existingRecords.first['id']],
+      );
+    } else {
+      await db.insert('attendance', map);
+    }
+  }
+
   Future<void> backupDatabase(String targetPath) async {
     try {
       final dbPath = await getDatabasesPath();

@@ -1,3 +1,4 @@
+import 'package:burdaa_vibe_v1/core/util/notification_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:burdaa_vibe_v1/data/courses/models/course_model.dart';
@@ -38,8 +39,10 @@ class CoursesState extends Equatable {
 // Bloc
 class CoursesBloc extends Bloc<CoursesEvent, CoursesState> {
   final CourseRepository repository;
+  final NotificationService notificationService;
 
-  CoursesBloc({required this.repository}) : super(const CoursesState()) {
+  CoursesBloc({required this.repository, required this.notificationService})
+    : super(const CoursesState()) {
     on<LoadCourses>((event, emit) async {
       final courses = await repository.getCourses();
       emit(CoursesState(courses: courses));
@@ -47,11 +50,13 @@ class CoursesBloc extends Bloc<CoursesEvent, CoursesState> {
 
     on<AddCourse>((event, emit) async {
       await repository.addCourse(event.course);
+      await notificationService.scheduleCourseNotification(event.course);
       add(LoadCourses());
     });
 
     on<DeleteCourse>((event, emit) async {
       await repository.deleteCourse(event.courseId);
+      await notificationService.cancelCourseNotification(event.courseId);
       add(LoadCourses());
     });
   }

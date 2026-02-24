@@ -6,6 +6,7 @@ import 'presentation/courses/bloc/courses_bloc.dart';
 import 'data/today/datasources/attendance_local_data_source.dart';
 import 'data/today/repositories/attendance_repository_impl.dart';
 import 'presentation/today/bloc/attendance_bloc.dart';
+import 'core/util/notification_service.dart';
 
 final sl = GetIt.instance; // sl is service locator
 
@@ -31,10 +32,14 @@ Future<void> init() async {
   );
 
   // Blocs
-  sl.registerFactory(() => CoursesBloc(repository: sl()));
+  // Blocs
+  sl.registerFactory(
+    () => CoursesBloc(repository: sl(), notificationService: sl()),
+  );
   sl.registerFactory(() => AttendanceBloc(repository: sl()));
 
   //! Core
+  sl.registerLazySingleton(() => NotificationService());
 
   //! External
 }
