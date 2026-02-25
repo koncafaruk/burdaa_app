@@ -45,6 +45,13 @@ class CoursesBloc extends Bloc<CoursesEvent, CoursesState> {
     : super(const CoursesState()) {
     on<LoadCourses>((event, emit) async {
       final courses = await repository.getCourses();
+
+      // Ensure all loaded courses have their scheduled notifications correctly set up
+      // This protects against db courses missing their alarms or after an app update
+      for (final course in courses) {
+        await notificationService.scheduleCourseNotification(course);
+      }
+
       emit(CoursesState(courses: courses));
     });
 

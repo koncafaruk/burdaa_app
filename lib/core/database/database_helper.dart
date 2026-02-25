@@ -148,6 +148,26 @@ class DatabaseHelper {
     }
   }
 
+  Future<void> restoreDatabase(String sourcePath) async {
+    try {
+      final dbPath = await getDatabasesPath();
+      final targetPath = join(dbPath, 'burdaa_vibe.db');
+      final sourceFile = File(sourcePath);
+
+      if (await sourceFile.exists()) {
+        if (_database != null) {
+          await _database!.close();
+          _database = null;
+        }
+        await sourceFile.copy(targetPath);
+      } else {
+        throw Exception('Yedek dosyası bulunamadı.');
+      }
+    } catch (e) {
+      throw Exception('Geri yükleme hatası: $e');
+    }
+  }
+
   Future<void> close() async {
     final db = await instance.database;
     db.close();

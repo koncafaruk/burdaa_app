@@ -161,11 +161,19 @@ class NotificationService {
     _responseController.add('attendance_update');
   }
 
+  int generateNotificationId(String id) {
+    int hash = 0;
+    for (int i = 0; i < id.length; i++) {
+      hash = (31 * hash + id.codeUnitAt(i)) & 0x7FFFFFFF;
+    }
+    return hash;
+  }
+
   Future<void> scheduleCourseNotification(CourseModel course) async {
     // ID needs to be unique. We can hash the course ID or use int.tryParse if ID is numeric.
     // Since course.id is String (UUID likely), we need a way to generate a stable int ID.
-    // Using hashCode is a simple way, though collisions are theoretically possible but rare enough for this.
-    final notificationId = course.id.hashCode;
+    // Using deterministic hash instead of hashCode since Dart's String hashCode varies across app runs.
+    final notificationId = generateNotificationId(course.id);
 
     // Calculate the next occurrence
     // frequency 31 is weekly.
@@ -249,7 +257,9 @@ class NotificationService {
   }
 
   Future<void> cancelCourseNotification(String courseId) async {
-    await flutterLocalNotificationsPlugin.cancel(courseId.hashCode);
+    await flutterLocalNotificationsPlugin.cancel(
+      generateNotificationId(courseId),
+    );
   }
 
   Future<void> cancelAllNotifications() async {

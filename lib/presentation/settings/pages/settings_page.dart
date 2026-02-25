@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../courses/bloc/courses_bloc.dart';
+import '../../../core/util/notification_service.dart';
 import '../../../core/database/database_helper.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -66,6 +69,13 @@ class SettingsPage extends StatelessWidget {
                         subtitle: 'Veritabanını harici bir dosyaya yedekle',
                         onTap: () => _handleBackup(context),
                       ),
+                      _buildSettingTile(
+                        context,
+                        icon: Icons.restore_outlined,
+                        title: 'Veritabanı Geri Yükle',
+                        subtitle: 'Yedekten veritabanını geri yükle',
+                        onTap: () => _handleRestore(context),
+                      ),
                       // _buildSettingTile(
                       //   context,
                       //   icon: Icons.info_outline_rounded,
@@ -105,16 +115,61 @@ class SettingsPage extends StatelessWidget {
         if (Theme.of(context).platform == TargetPlatform.windows ||
             Theme.of(context).platform == TargetPlatform.linux ||
             Theme.of(context).platform == TargetPlatform.macOS) {
-          // file_picker on desktop might just return the path without saving if bytes are provided?
-          // Actually, check if it already saved. To be safe on Desktop, we can still call backupDatabase
-          // but typically file_picker with bytes should handle it.
-          // On Mobile, selectedPath is the result of the save operation.
           await DatabaseHelper.instance.backupDatabase(selectedPath);
         }
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Yedekleme başarılı: $fileName'),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Hata: $e'), backgroundColor: Colors.red),
+        );
+      }
+    }
+  }
+
+  Future<void> _handleRestore(BuildContext context) async {
+    try {
+      final FilePickerResult? result = await FilePicker.platform.pickFiles(
+        dialogTitle: 'Veritabanı Dosyası Seç (Yedek)',
+        type: FileType.any,
+      );
+
+      if (result != null && result.files.single.path != null) {
+        final path = result.files.single.path!;
+        if (!path.endsWith('.db')) {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Hata: Lütfen geçerli bir .db dosyası seçin.'),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+          return;
+        }
+
+        await DatabaseHelper.instance.restoreDatabase(path);
+
+        // Cancel old notifications before refreshing courses
+        await NotificationService().cancelAllNotifications();
+
+        if (context.mounted) {
+          // Trigger course reload which implicitly handles setting up new notifications via CoursesBloc logic
+          context.read<CoursesBloc>().add(LoadCourses());
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                'Veritabanı geri yüklendi! Kurslar ve bildirimler güncellendi.',
+              ),
               backgroundColor: Colors.green,
             ),
           );
