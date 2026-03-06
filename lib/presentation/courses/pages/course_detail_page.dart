@@ -464,7 +464,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
             Expanded(
               child: _buildSummaryCard(
                 context,
-                'Girilmeyen',
+                'Kaydedilmeyen',
                 unrecorded.toString(),
                 Colors.orange,
                 Icons.help_outline_rounded,
@@ -654,15 +654,13 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
             ),
           ),
           Text(
-            'Girilmedi',
+            'Kaydedilmedi',
             style: GoogleFonts.inter(
               color: Colors.orange,
               fontWeight: FontWeight.bold,
               fontSize: 13,
             ),
           ),
-          const SizedBox(width: 12),
-          Icon(Icons.chevron_right_rounded, color: Colors.grey[400]),
         ],
       ),
     );

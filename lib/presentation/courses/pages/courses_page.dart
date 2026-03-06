@@ -94,11 +94,45 @@ class CoursesPage extends StatelessWidget {
                           ),
                         );
                       }
+                      final groupedCourses = <int, List<CourseModel>>{};
+                      for (var course in state.courses) {
+                        groupedCourses
+                            .putIfAbsent(course.dayOfWeek, () => [])
+                            .add(course);
+                      }
+
+                      final sortedDays = groupedCourses.keys.toList()..sort();
+
+                      final List<Widget> listItems = [];
+                      for (var day in sortedDays) {
+                        // Day Header
+                        listItems.add(
+                          Padding(
+                            padding: const EdgeInsets.only(top: 16, bottom: 12),
+                            child: Text(
+                              _getDayName(day),
+                              style: GoogleFonts.outfit(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                            ),
+                          ),
+                        );
+
+                        // Sort courses within the day by startTime
+                        final coursesInDay = groupedCourses[day]!
+                          ..sort((a, b) => a.startTime.compareTo(b.startTime));
+
+                        for (var course in coursesInDay) {
+                          listItems.add(_CourseCard(course: course));
+                        }
+                      }
+
                       return ListView.builder(
-                        itemCount: state.courses.length,
+                        itemCount: listItems.length,
                         itemBuilder: (context, index) {
-                          final course = state.courses[index];
-                          return _CourseCard(course: course);
+                          return listItems[index];
                         },
                       );
                     },
@@ -110,6 +144,20 @@ class CoursesPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String _getDayName(int day) {
+    const days = [
+      '',
+      'Pazartesi',
+      'Salı',
+      'Çarşamba',
+      'Perşembe',
+      'Cuma',
+      'Cumartesi',
+      'Pazar',
+    ];
+    return days[day];
   }
 
   void _showAddCourseDialog(BuildContext context) {
@@ -126,20 +174,6 @@ class _CourseCard extends StatelessWidget {
   final CourseModel course;
 
   const _CourseCard({required this.course});
-
-  String _getDayName(int day) {
-    const days = [
-      '',
-      'Pazartesi',
-      'Salı',
-      'Çarşamba',
-      'Perşembe',
-      'Cuma',
-      'Cumartesi',
-      'Pazar',
-    ];
-    return days[day];
-  }
 
   void _showDeleteConfirmation(BuildContext context) {
     showDialog(
@@ -229,7 +263,7 @@ class _CourseCard extends StatelessWidget {
           ),
         ),
         subtitle: Text(
-          '${_getDayName(course.dayOfWeek)} • ${course.startTime} - ${course.endTime}',
+          '${course.startTime} - ${course.endTime}',
           style: GoogleFonts.inter(
             textStyle: TextStyle(color: Colors.grey[600]),
           ),

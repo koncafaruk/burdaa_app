@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../courses/bloc/courses_bloc.dart';
+import '../../today/bloc/attendance_bloc.dart';
 import '../../../core/util/notification_service.dart';
 import '../../../core/database/database_helper.dart';
 
@@ -65,7 +66,7 @@ class SettingsPage extends StatelessWidget {
                       _buildSettingTile(
                         context,
                         icon: Icons.backup_outlined,
-                        title: 'Veritabanı Yedeği',
+                        title: 'Veritabanını Yedekle',
                         subtitle: 'Veritabanını harici bir dosyaya yedekle',
                         onTap: () => _handleBackup(context),
                       ),
@@ -164,6 +165,7 @@ class SettingsPage extends StatelessWidget {
         if (context.mounted) {
           // Trigger course reload which implicitly handles setting up new notifications via CoursesBloc logic
           context.read<CoursesBloc>().add(LoadCourses());
+          context.read<AttendanceBloc>().add(LoadAttendance());
 
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(

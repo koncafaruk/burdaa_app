@@ -6,6 +6,7 @@ import '../bloc/attendance_bloc.dart';
 import 'package:burdaa_vibe_v1/data/courses/models/course_model.dart';
 import 'package:burdaa_vibe_v1/data/today/models/attendance_record.dart';
 import 'package:burdaa_vibe_v1/presentation/courses/pages/course_detail_page.dart';
+import 'package:burdaa_vibe_v1/presentation/today/pages/unrecorded_sessions_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:burdaa_vibe_v1/core/util/notification_service.dart';
@@ -58,6 +59,51 @@ class _TodayPageState extends State<TodayPage> with WidgetsBindingObserver {
     }
   }
 
+  int _calculateUnrecordedSessionsCount(
+    List<CourseModel> courses,
+    List<AttendanceRecord> records,
+  ) {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    int count = 0;
+
+    for (var course in courses) {
+      final startDate = DateTime(
+        course.startDate.year,
+        course.startDate.month,
+        course.startDate.day,
+      );
+      final endDate = DateTime(
+        course.endDate.year,
+        course.endDate.month,
+        course.endDate.day,
+      );
+
+      final checkUntil = today.subtract(const Duration(days: 1));
+      final actualCheckUntil = checkUntil.isBefore(endDate)
+          ? checkUntil
+          : endDate;
+
+      DateTime tempDate = startDate;
+      while (!tempDate.isAfter(actualCheckUntil)) {
+        if (tempDate.weekday == course.dayOfWeek) {
+          bool exists = records.any(
+            (r) =>
+                r.courseId == course.id &&
+                r.date.year == tempDate.year &&
+                r.date.month == tempDate.month &&
+                r.date.day == tempDate.day,
+          );
+          if (!exists) {
+            count++;
+          }
+        }
+        tempDate = tempDate.add(const Duration(days: 1));
+      }
+    }
+    return count;
+  }
+
   @override
   Widget build(BuildContext context) {
     final now = DateTime.now();
@@ -108,61 +154,94 @@ class _TodayPageState extends State<TodayPage> with WidgetsBindingObserver {
                 Expanded(
                   child: BlocBuilder<CoursesBloc, CoursesState>(
                     builder: (context, coursesState) {
-                      final todayCourses = coursesState.courses
-                          .where((c) => c.dayOfWeek == todayWeekday)
-                          .toList();
-
-                      if (todayCourses.isEmpty) {
-                        return Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.calendar_today_rounded,
-                                size: 100,
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.primary.withOpacity(0.2),
-                              ),
-                              const SizedBox(height: 24),
-                              Text(
-                                'Bugün için bir dersin yok',
-                                style: GoogleFonts.inter(
-                                  textStyle: Theme.of(
-                                    context,
-                                  ).textTheme.titleMedium,
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-
                       return BlocBuilder<AttendanceBloc, AttendanceState>(
                         builder: (context, attendanceState) {
-                          return ListView.builder(
-                            itemCount: todayCourses.length,
-                            itemBuilder: (context, index) {
-                              final course = todayCourses[index];
-                              final record = attendanceState.records.firstWhere(
-                                (r) =>
-                                    r.courseId == course.id &&
-                                    r.date.year == now.year &&
-                                    r.date.month == now.month &&
-                                    r.date.day == now.day,
-                                orElse: () => AttendanceRecord(
-                                  courseId: course.id,
-                                  date: now,
-                                  status: AttendanceStatus.none,
-                                  recordedAt: now,
-                                ),
+                          final int unrecordedCount =
+                              _calculateUnrecordedSessionsCount(
+                                coursesState.courses,
+                                attendanceState.records,
                               );
 
-                              return _TodayCourseCard(
-                                course: course,
-                                record: record,
-                              );
-                            },
+                          final todayCourses =
+                              coursesState.courses
+                                  .where((c) => c.dayOfWeek == todayWeekday)
+                                  .toList()
+                                ..sort(
+                                  (a, b) => a.startTime.compareTo(b.startTime),
+                                );
+
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              if (unrecordedCount > 0) ...[
+                                _UnrecordedSessionsAlert(
+                                  count: unrecordedCount,
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const UnrecordedSessionsPage(),
+                                      ),
+                                    );
+                                  },
+                                ),
+                                const SizedBox(height: 24),
+                              ],
+                              Expanded(
+                                child: todayCourses.isEmpty
+                                    ? Center(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              Icons.calendar_today_rounded,
+                                              size: 100,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary
+                                                  .withOpacity(0.2),
+                                            ),
+                                            const SizedBox(height: 24),
+                                            Text(
+                                              'Bugün için bir dersin yok',
+                                              style: GoogleFonts.inter(
+                                                textStyle: Theme.of(
+                                                  context,
+                                                ).textTheme.titleMedium,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    : ListView.builder(
+                                        itemCount: todayCourses.length,
+                                        itemBuilder: (context, index) {
+                                          final course = todayCourses[index];
+                                          final record = attendanceState.records
+                                              .firstWhere(
+                                                (r) =>
+                                                    r.courseId == course.id &&
+                                                    r.date.year == now.year &&
+                                                    r.date.month == now.month &&
+                                                    r.date.day == now.day,
+                                                orElse: () => AttendanceRecord(
+                                                  courseId: course.id,
+                                                  date: now,
+                                                  status: AttendanceStatus.none,
+                                                  recordedAt: now,
+                                                ),
+                                              );
+
+                                          return _TodayCourseCard(
+                                            course: course,
+                                            record: record,
+                                          );
+                                        },
+                                      ),
+                              ),
+                            ],
                           );
                         },
                       );
@@ -270,13 +349,22 @@ class _TodayCourseCard extends StatelessWidget {
                     color: Colors.green,
                     isSelected: isAttended,
                     onTap: () {
-                      context.read<AttendanceBloc>().add(
-                        MarkAttendance(
-                          courseId: course.id,
-                          status: AttendanceStatus.attended,
-                          date: DateTime.now(),
-                        ),
-                      );
+                      if (isAttended) {
+                        context.read<AttendanceBloc>().add(
+                          DeleteAttendance(
+                            courseId: course.id,
+                            date: record.date,
+                          ),
+                        );
+                      } else {
+                        context.read<AttendanceBloc>().add(
+                          MarkAttendance(
+                            courseId: course.id,
+                            status: AttendanceStatus.attended,
+                            date: DateTime.now(),
+                          ),
+                        );
+                      }
                     },
                   ),
                 ),
@@ -288,13 +376,22 @@ class _TodayCourseCard extends StatelessWidget {
                     color: Colors.redAccent,
                     isSelected: isMissed,
                     onTap: () {
-                      context.read<AttendanceBloc>().add(
-                        MarkAttendance(
-                          courseId: course.id,
-                          status: AttendanceStatus.missed,
-                          date: DateTime.now(),
-                        ),
-                      );
+                      if (isMissed) {
+                        context.read<AttendanceBloc>().add(
+                          DeleteAttendance(
+                            courseId: course.id,
+                            date: record.date,
+                          ),
+                        );
+                      } else {
+                        context.read<AttendanceBloc>().add(
+                          MarkAttendance(
+                            courseId: course.id,
+                            status: AttendanceStatus.missed,
+                            date: DateTime.now(),
+                          ),
+                        );
+                      }
                     },
                   ),
                 ),
@@ -469,6 +566,58 @@ class _AttendanceButton extends StatelessWidget {
                 ),
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _UnrecordedSessionsAlert extends StatelessWidget {
+  final int count;
+  final VoidCallback onTap;
+
+  const _UnrecordedSessionsAlert({required this.count, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.orange.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.orange.withOpacity(0.3)),
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.orange.withOpacity(0.2),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.warning_rounded,
+                color: Colors.orange,
+                size: 20,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                '$count ders henüz kaydedilmedi',
+                style: GoogleFonts.inter(
+                  textStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.orange[800],
+                  ),
+                ),
+              ),
+            ),
+            Icon(Icons.chevron_right_rounded, color: Colors.orange[800]),
           ],
         ),
       ),
