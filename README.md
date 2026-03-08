@@ -1,4 +1,4 @@
-# burdaa_vibe_v1
+# burdaa_app
 
 A new Flutter project.
 
