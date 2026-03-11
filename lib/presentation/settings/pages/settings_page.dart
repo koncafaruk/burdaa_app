@@ -49,20 +49,6 @@ class SettingsPage extends StatelessWidget {
                 Expanded(
                   child: ListView(
                     children: [
-                      // _buildSettingTile(
-                      //   context,
-                      //   icon: Icons.notifications_none_rounded,
-                      //   title: 'Bildirimler',
-                      //   subtitle: 'Bildirim tercihlerinizi yönetin',
-                      //   onTap: () {},
-                      // ),
-                      // _buildSettingTile(
-                      //   context,
-                      //   icon: Icons.palette_outlined,
-                      //   title: 'Tema',
-                      //   subtitle: 'Aydınlık / Karanlık mod',
-                      //   onTap: () {},
-                      // ),
                       _buildSettingTile(
                         context,
                         icon: Icons.backup_outlined,
@@ -77,14 +63,21 @@ class SettingsPage extends StatelessWidget {
                         subtitle: 'Yedekten veritabanını geri yükle',
                         onTap: () => _handleRestore(context),
                       ),
-                      // _buildSettingTile(
-                      //   context,
-                      //   icon: Icons.info_outline_rounded,
-                      //   title: 'Hakkında',
-                      //   subtitle: 'Uygulama sürümü ve detaylar',
-                      //   onTap: () {},
-                      // ),
                     ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: Center(
+                    child: Column(
+                      children: [
+                        Text(
+                          'Versiyon 1.0.1+5',
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(color: Colors.grey[500]),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],

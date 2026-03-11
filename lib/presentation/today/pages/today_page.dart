@@ -104,6 +104,64 @@ class _TodayPageState extends State<TodayPage> with WidgetsBindingObserver {
     return count;
   }
 
+  CourseStats _calculateCourseStats(
+    CourseModel course,
+    List<AttendanceRecord> records,
+  ) {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+
+    int attended = 0;
+    int missed = 0;
+    int notEntered = 0;
+
+    final startDate = DateTime(
+      course.startDate.year,
+      course.startDate.month,
+      course.startDate.day,
+    );
+    final endDate = DateTime(
+      course.endDate.year,
+      course.endDate.month,
+      course.endDate.day,
+    );
+
+    final checkUntil = today;
+    final actualCheckUntil = checkUntil.isBefore(endDate)
+        ? checkUntil
+        : endDate;
+
+    DateTime tempDate = startDate;
+    while (!tempDate.isAfter(actualCheckUntil)) {
+      if (tempDate.weekday == course.dayOfWeek) {
+        final recordIndex = records.indexWhere(
+          (r) =>
+              r.courseId == course.id &&
+              r.date.year == tempDate.year &&
+              r.date.month == tempDate.month &&
+              r.date.day == tempDate.day,
+        );
+
+        if (recordIndex != -1) {
+          final record = records[recordIndex];
+          if (record.status == AttendanceStatus.attended) {
+            attended++;
+          } else if (record.status == AttendanceStatus.missed) {
+            missed++;
+          }
+        } else {
+          notEntered++;
+        }
+      }
+      tempDate = tempDate.add(const Duration(days: 1));
+    }
+    return CourseStats(
+      attended: attended,
+      missed: missed,
+      notEntered: notEntered,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final now = DateTime.now();
@@ -237,6 +295,10 @@ class _TodayPageState extends State<TodayPage> with WidgetsBindingObserver {
                                           return _TodayCourseCard(
                                             course: course,
                                             record: record,
+                                            stats: _calculateCourseStats(
+                                              course,
+                                              attendanceState.records,
+                                            ),
                                           );
                                         },
                                       ),
@@ -257,44 +319,61 @@ class _TodayPageState extends State<TodayPage> with WidgetsBindingObserver {
   }
 }
 
+class CourseStats {
+  final int attended;
+  final int missed;
+  final int notEntered;
+
+  const CourseStats({
+    required this.attended,
+    required this.missed,
+    required this.notEntered,
+  });
+}
+
 class _TodayCourseCard extends StatelessWidget {
   final CourseModel course;
   final AttendanceRecord record;
+  final CourseStats stats;
 
-  const _TodayCourseCard({required this.course, required this.record});
+  const _TodayCourseCard({
+    required this.course,
+    required this.record,
+    required this.stats,
+  });
 
   @override
   Widget build(BuildContext context) {
     bool isAttended = record.status == AttendanceStatus.attended;
     bool isMissed = record.status == AttendanceStatus.missed;
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 15,
-            offset: const Offset(0, 5),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CourseDetailPage(course: course),
           ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CourseDetailPage(course: course),
-                  ),
-                );
-              },
-              child: Row(
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 16),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 15,
+              offset: const Offset(0, 5),
+            ),
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              Row(
                 children: [
                   Container(
                     padding: const EdgeInsets.all(12),
@@ -323,81 +402,125 @@ class _TodayCourseCard extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Text(
-                          '${course.startTime} - ${course.endTime}',
-                          style: GoogleFonts.inter(
-                            textStyle: TextStyle(
-                              color: Colors.grey[600],
-                              fontWeight: FontWeight.w500,
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            Text(
+                              '${course.startTime} - ${course.endTime}',
+                              style: GoogleFonts.inter(
+                                textStyle: TextStyle(
+                                  color: Colors.grey[600],
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
                             ),
-                          ),
+                            const SizedBox(width: 8),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 6,
+                                vertical: 2,
+                              ),
+                              decoration: BoxDecoration(
+                                color: stats.missed == 0
+                                    ? Colors.green.withOpacity(0.1)
+                                    : Colors.redAccent.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    stats.missed == 0
+                                        ? Icons.check_circle_rounded
+                                        : Icons.cancel_rounded,
+                                    size: 10,
+                                    color: stats.missed == 0
+                                        ? Colors.green
+                                        : Colors.redAccent,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    '${stats.missed} Devamsızlık',
+                                    style: GoogleFonts.inter(
+                                      textStyle: TextStyle(
+                                        color: stats.missed == 0
+                                            ? Colors.green
+                                            : Colors.redAccent,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 10,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ),
-                  Icon(Icons.chevron_right_rounded, color: Colors.grey[400]),
                 ],
               ),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(
-                  child: _AttendanceButton(
-                    label: 'Katıldım',
-                    icon: Icons.check_circle_rounded,
-                    color: Colors.green,
-                    isSelected: isAttended,
-                    onTap: () {
-                      if (isAttended) {
-                        context.read<AttendanceBloc>().add(
-                          DeleteAttendance(
-                            courseId: course.id,
-                            date: record.date,
-                          ),
-                        );
-                      } else {
-                        context.read<AttendanceBloc>().add(
-                          MarkAttendance(
-                            courseId: course.id,
-                            status: AttendanceStatus.attended,
-                            date: DateTime.now(),
-                          ),
-                        );
-                      }
-                    },
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Expanded(
+                    child: _AttendanceButton(
+                      label: 'Katıldım',
+                      icon: Icons.check_circle_rounded,
+                      color: Colors.green,
+                      isSelected: isAttended,
+                      onTap: () {
+                        if (isAttended) {
+                          context.read<AttendanceBloc>().add(
+                            DeleteAttendance(
+                              courseId: course.id,
+                              date: record.date,
+                            ),
+                          );
+                        } else {
+                          context.read<AttendanceBloc>().add(
+                            MarkAttendance(
+                              courseId: course.id,
+                              status: AttendanceStatus.attended,
+                              date: DateTime.now(),
+                            ),
+                          );
+                        }
+                      },
+                    ),
                   ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _AttendanceButton(
-                    label: 'Katılmadım',
-                    icon: Icons.cancel_rounded,
-                    color: Colors.redAccent,
-                    isSelected: isMissed,
-                    onTap: () {
-                      if (isMissed) {
-                        context.read<AttendanceBloc>().add(
-                          DeleteAttendance(
-                            courseId: course.id,
-                            date: record.date,
-                          ),
-                        );
-                      } else {
-                        context.read<AttendanceBloc>().add(
-                          MarkAttendance(
-                            courseId: course.id,
-                            status: AttendanceStatus.missed,
-                            date: DateTime.now(),
-                          ),
-                        );
-                      }
-                    },
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _AttendanceButton(
+                      label: 'Katılmadım',
+                      icon: Icons.cancel_rounded,
+                      color: Colors.redAccent,
+                      isSelected: isMissed,
+                      onTap: () {
+                        if (isMissed) {
+                          context.read<AttendanceBloc>().add(
+                            DeleteAttendance(
+                              courseId: course.id,
+                              date: record.date,
+                            ),
+                          );
+                        } else {
+                          context.read<AttendanceBloc>().add(
+                            MarkAttendance(
+                              courseId: course.id,
+                              status: AttendanceStatus.missed,
+                              date: DateTime.now(),
+                            ),
+                          );
+                        }
+                      },
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
